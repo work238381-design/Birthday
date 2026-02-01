@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday 🎂</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:linear-gradient(135deg,#fdeff9,#ec38bc,#7303c0);
+  font-family:"Segoe UI",sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+.screen{
+  width:90%;
+  max-width:400px;
+  background:white;
+  border-radius:20px;
+  padding:24px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+  display:none;
+}
+
+.screen.active{display:block}
+
+button{
+  padding:12px 22px;
+  border:none;
+  border-radius:25px;
+  font-size:15px;
+  cursor:pointer;
+  background:#ff5fa2;
+  color:white;
+  margin-top:16px;
+}
+
+/* Balloons */
+.balloon{
+  width:70px;
+  height:90px;
+  border-radius:50%;
+  position:absolute;
+  cursor:pointer;
+  animation:bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-25px)}
+}
+
+/* Popup */
+.popup{
+  position:absolute;
+  background:white;
+  padding:6px 10px;
+  border-radius:10px;
+  font-weight:600;
+  text-align:center;
+  animation:fade 1.2s forwards;
+}
+
+@keyframes fade{
+  to{opacity:0}
+}
+
+/* Media */
+video, img{
+  width:100%;
+  border-radius:15px;
+  margin-bottom:12px;
+}
+video{object-fit:cover}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING -->
+<div id="open" class="screen active">
+  <h2>Hey Anushka 🌸</h2>
+  <p>
+    Today isn’t just another day…<br>
+    It’s the day someone truly special was born 🎂
+  </p>
+  <button onclick="go('game')">Start 🎈</button>
+</div>
+
+<!-- BALLOON GAME -->
+<div id="game" class="screen">
+  <h3>Find the Birthday Balloon 🎈</h3>
+</div>
+
+<!-- MEMORY 1 -->
+<div id="m1" class="screen">
+  <video src="media/clip1.mp4" autoplay muted loop playsinline></video>
+  <p>You somehow make normal moments feel lighter.</p>
+  <button onclick="go('m2')">Next →</button>
+</div>
+
+<!-- MEMORY 2 -->
+<div id="m2" class="screen">
+  <video src="media/clip2.mp4" autoplay muted loop playsinline></video>
+  <p>And your laugh… yeah, that one stays 😄</p>
+  <button onclick="go('m3')">Next →</button>
+</div>
+
+<!-- MEMORY 3 (PHOTO + FINAL LINE) -->
+<div id="m3" class="screen">
+  <img src="media/photo-final.jpg" alt="memory">
+  <p>
+    Some things feel right without trying.<br>
+    <strong>I want to be with you, forever and ever.</strong>
+  </p>
+  <button onclick="go('gift')">Continue 🎁</button>
+</div>
+
+<!-- FINAL GIFT -->
+<div id="gift" class="screen">
+  <h3>One last little gift 🎁</h3>
+  <p>I couldn’t wrap this in paper… so I wrapped it in a link.</p>
+
+  <a href="https://www.instagram.com/hbdanushkababy?igsh=OGV5YzQwYTdrMnE=" target="_blank">
+    <button>Open Your Birthday Gift 💖</button>
+  </a>
+
+  <p style="margin-top:18px;">Happy Birthday, Anushka 💛</p>
+</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==="game") startGame();
+}
+
+function startGame(){
+  const game=document.getElementById("game");
+  game.innerHTML="<h3>Find the Birthday Balloon 🎈</h3>";
+
+  const correct=Math.floor(Math.random()*5);
+  const colors=["#ff9aa2","#b5ead7","#c7ceea","#ffdac1","#e2f0cb"];
+
+  for(let i=0;i<5;i++){
+    const b=document.createElement("div");
+    b.className="balloon";
+    b.style.background=colors[i];
+    b.style.left=10+i*15+"%";
+    b.style.top="60%";
+
+    b.onclick=()=>{
+      const rect=b.getBoundingClientRect();
+      if(i===correct){
+        game.innerHTML="<h2>Yay! Birthday unlocked 🎉</h2>";
+        setTimeout(()=>go('m1'),1200);
+      }else{
+        b.remove();
+
+        const p=document.createElement("div");
+        p.className="popup";
+        p.style.left=rect.left+"px";
+        p.style.top=rect.top+"px";
+
+        p.innerHTML=`
+          <img src="https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycTlmbmNsaXA5ZDY0d3QwdXRkdG12eDUyaHY0ZTBxbXF6dDV4bXY2NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5rlcTq5MAyYLhL6BsL/giphy.gif" width="90">
+          <div style="margin-top:4px;">Aeee chal chal 😝</div>
+        `;
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),1200);
+      }
+    };
+    game.appendChild(b);
+  }
+}
+</script>
+
+</body>
+  </html>
